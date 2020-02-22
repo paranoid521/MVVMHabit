@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +50,34 @@ public final class SPUtils {
     private SPUtils(final String spName) {
         sp = Utils.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
     }
+
+    /**
+     * SP中写入Object
+     *
+     * @param key 键
+     * @param value 值
+     */
+    public void put(@NonNull final String key, @NonNull final Object value) {
+        Gson gson = new Gson();
+        String json = gson.toJson(value);
+        sp.edit().putString(key, json).apply();
+    }
+
+    /**
+     * SP中读取Object
+     *
+     * @param key 键
+     * @return 存在返回对应值，不存在返回默认值{@code ""}
+     */
+    public Object getObject(@NonNull final String key) {
+        Gson gson = new Gson();
+        String json = sp.getString(key, null);
+        Type type = new TypeToken<Object>() {
+        }.getType();
+        Object obj = gson.fromJson(json, type);
+        return obj;
+    }
+
 
     /**
      * SP中写入String
