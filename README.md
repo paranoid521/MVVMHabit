@@ -7,9 +7,11 @@
 - 升级第三方依赖库；
 - 修改文档说明。
 #### [更多日志](./UpdateLog.md)
+
+#### [AndroidX分支](https://github.com/goldze/MVVMHabit/tree/androidx)
 ***
 
-**注：[1.x-废弃版（最后版本：1.2.6.1）](https://github.com/goldze/MVVMHabit/tree/1.2.6.1)、[2.x-顺手版（最后版本：2.0.10）](https://github.com/goldze/MVVMHabit/tree/2.0.10)已停止维护，建议使用当前[3.x-健壮版（最后版本：3.1.2）](https://github.com/goldze/MVVMHabit)。**
+**注：[1.x-废弃版（最后版本：1.2.6.1）](https://github.com/goldze/MVVMHabit/tree/1.2.6.1)、[2.x-顺手版（最后版本：2.0.10）](https://github.com/goldze/MVVMHabit/tree/2.0.10)已停止维护，建议使用当前[3.x-健壮版（最后版本：3.1.3）](https://github.com/goldze/MVVMHabit)。**
 
 > **原文地址：** [https://github.com/goldze/MVVMHabit](https://github.com/goldze/MVVMHabit)
 
@@ -80,7 +82,7 @@ allprojects {
 ```gradle
 dependencies {
     ...
-    implementation 'com.github.goldze:MVVMHabit:3.1.2'
+    implementation 'com.github.goldze:MVVMHabit:3.1.3'
 }
 ```
 或
@@ -573,10 +575,10 @@ Messenger.getDefault().register(this, LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRES
 //参数2：定义的token
 //参数3：实体的泛型约束
 //参数4：执行的回调监听
-Messenger.getDefault().register(this, LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH, String.class, new Consumer<String>() {
+Messenger.getDefault().register(this, LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH, String.class, new BindingConsumer<String>() {
     @Override
-    public void accept(String s) throws Exception {
-                
+    public void call(String s) {
+         
     }
 });
 ```
@@ -766,6 +768,22 @@ ImageUtils.compressWithRx(filePaths, new Subscriber() {
 
 解决方法：其实确保自己的写法没有问题，是可以直接运行的，报红不一定是你写的有问题，也有可能是编译器抽风了。或者使用下面的办法</br>
 第一招：Build->Clean Project；</br>第二招：Build->Rebuild Project；</br>第三招：重启大法。
+
+##### 4.1.5、gradle错误
+如果遇到以下编译问题：
+
+错误: 无法将类 BindingRecyclerViewAdapters中的方法 setAdapter应用到给定类型;
+需要: RecyclerView,ItemBinding,List,BindingRecyclerViewAdapter,ItemIds<? super T>,ViewHolderFactory
+找到: RecyclerView,ItemBinding,ObservableList,BindingRecyclerViewAdapter<CAP#1>,ItemIds,ViewHolderFactory
+原因: 推断类型不符合等式约束条件
+推断: CAP#1
+等式约束条件: CAP#1,NetWorkItemViewModel
+其中, T是类型变量:
+T扩展已在方法 setAdapter(RecyclerView,ItemBinding,List,BindingRecyclerViewAdapter,ItemIds<? super T>,ViewHolderFactory)中声明的Object
+其中, CAP#1是新类型变量:
+CAP#1从?的捕获扩展Object
+
+一般是由于gradle plugin版本3.5.1造成的，请换成gradle plugin 3.5.0以下版本
 
 ## 混淆
 例子程序中给出了最新的【MVVMHabit混淆规则】，包含MVVMHabit中依赖的所有第三方library，可以将规则直接拷贝到自己app的混淆规则中。在此基础上你只需要关注自己业务代码以及自己引入第三方的混淆，【MVVMHabit混淆规则】请参考app目录下的[proguard-rules.pro](./app/proguard-rules.pro)文件。

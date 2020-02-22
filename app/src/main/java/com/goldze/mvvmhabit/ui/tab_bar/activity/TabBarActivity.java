@@ -55,9 +55,7 @@ public class TabBarActivity extends BaseActivity<ActivityTabBarBinding, BaseView
         mFragments.add(new TabBar3Fragment());
         mFragments.add(new TabBar4Fragment());
         //默认选中第一个
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.frameLayout, mFragments.get(0));
-        transaction.commitAllowingStateLoss();
+        commitAllowingStateLoss(0);
     }
 
     private void initBottomTab() {
@@ -72,14 +70,39 @@ public class TabBarActivity extends BaseActivity<ActivityTabBarBinding, BaseView
         navigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
             public void onSelected(int index, int old) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameLayout, mFragments.get(index));
-                transaction.commitAllowingStateLoss();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.frameLayout, mFragments.get(index));
+//                transaction.commitAllowingStateLoss();
+                commitAllowingStateLoss(index);
             }
 
             @Override
             public void onRepeat(int index) {
             }
         });
+    }
+    private void commitAllowingStateLoss(int position) {
+        hideAllFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(position + "");
+        if (currentFragment != null) {
+            transaction.show(currentFragment);
+        } else {
+            currentFragment = mFragments.get(position);
+            transaction.add(R.id.frameLayout, currentFragment, position + "");
+        }
+        transaction.commitAllowingStateLoss();
+    }
+
+    //隐藏所有Fragment
+    private void hideAllFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        for (int i = 0; i < mFragments.size(); i++) {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(i + "");
+            if (currentFragment != null) {
+                transaction.hide(currentFragment);
+            }
+        }
+        transaction.commitAllowingStateLoss();
     }
 }
