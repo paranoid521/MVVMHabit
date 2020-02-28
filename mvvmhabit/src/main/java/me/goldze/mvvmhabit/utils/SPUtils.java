@@ -52,34 +52,6 @@ public final class SPUtils {
     }
 
     /**
-     * SP中写入Object
-     *
-     * @param key 键
-     * @param value 值
-     */
-    public void put(@NonNull final String key, @NonNull final Object value) {
-        Gson gson = new Gson();
-        String json = gson.toJson(value);
-        sp.edit().putString(key, json).apply();
-    }
-
-    /**
-     * SP中读取Object
-     *
-     * @param key 键
-     * @return 存在返回对应值，不存在返回默认值{@code ""}
-     */
-    public Object getObject(@NonNull final String key) {
-        Gson gson = new Gson();
-        String json = sp.getString(key, null);
-        Type type = new TypeToken<Object>() {
-        }.getType();
-        Object obj = gson.fromJson(json, type);
-        return obj;
-    }
-
-
-    /**
      * SP中写入String
      *
      * @param key 键
@@ -263,6 +235,44 @@ public final class SPUtils {
      */
     public Set<String> getStringSet(@NonNull final String key, @NonNull final Set<String> defaultValue) {
         return sp.getStringSet(key, defaultValue);
+    }
+
+    /**
+     * SP中写入Object
+     *
+     * @param key 键
+     * @param value 值
+     */
+    public void put(@NonNull final String key, @NonNull final Object value) {
+        Gson gson = new Gson();
+        String json = gson.toJson(value);
+        sp.edit().putString(key, json).apply();
+    }
+
+    /**
+     * SP中读取Object
+     *
+     * @param key 键
+     * @return 存在返回对应值，不存在返回默认值{@code ""}
+     */
+    public Object getObject(@NonNull final String key) {
+        Gson gson = new Gson();
+        String json = sp.getString(key, null);
+        Type type = new TypeToken<Object>() {
+        }.getType();
+        Object obj = gson.fromJson(json, type);
+        return obj;
+    }
+
+    /**
+     * SP中读取Object
+     *
+     * @param key 键
+     * @param defaultValue 默认值
+     * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
+     */
+    public Object getObject(@NonNull final String key, @NonNull final Object defaultValue) {
+        return defaultValue;
     }
 
     /**
