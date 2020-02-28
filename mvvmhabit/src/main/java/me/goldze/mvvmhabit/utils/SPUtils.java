@@ -243,7 +243,7 @@ public final class SPUtils {
      * @param key 键
      * @param value 值
      */
-    public void put(@NonNull final String key, @NonNull final Object value) {
+    public void putObject(@NonNull final String key, @NonNull final Object value) {
         Gson gson = new Gson();
         String json = gson.toJson(value);
         sp.edit().putString(key, json).apply();
