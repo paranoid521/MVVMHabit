@@ -49,6 +49,7 @@ public class BaseResponse<T> {
     }
 
     public void setData(T data) {
+        System.out.println( data + "========baseResponse========");
         this.data = data;
     }
 
