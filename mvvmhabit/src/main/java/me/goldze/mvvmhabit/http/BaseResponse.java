@@ -6,9 +6,6 @@ package me.goldze.mvvmhabit.http;
  */
 public class BaseResponse<T> {
     private int code;
-    private String msg;
-    private T data;
-
     private String message;
     private  T result;
 
@@ -34,23 +31,6 @@ public class BaseResponse<T> {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        System.out.println( data + "========baseResponse========");
-        this.data = data;
     }
 
     public boolean isOk() {
